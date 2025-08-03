@@ -43,38 +43,38 @@ generate_bindings :: (args: [] string) -> bool
     output_filename: string;
     opts: Generate_Bindings_Options;
     {
-        using opts;
-
         target_wasm: = false;
         if array_find(args, "-wasm") target_wasm = true;
 
         if target_wasm
         {
-            array_add(*libpaths, "wasm");
+            array_add(*opts.libpaths, "wasm");
             output_filename = "wasm.jai";
             opts.static_library_suffix = ".a";
         }
         else
         {
             #if OS == .WINDOWS {
-            array_add(*libpaths, "windows");
+            array_add(*opts.libpaths, "windows");
             output_filename = "windows.jai";
             } else {
                 assert(false);
             }
         }
 
-        array_add(*libnames,      "raylib");
-        array_add(*include_paths, RAYLIB_PATH);
-        array_add(*source_files,  tprint("%/src/raylib.h", RAYLIB_PATH));
-        array_add(*source_files,  tprint("%/src/raymath.h", RAYLIB_PATH));
-        array_add(*source_files,  tprint("%/src/rlgl.h", RAYLIB_PATH));
-        array_add(*strip_prefixes, "rl");
-        auto_detect_enum_prefixes = false;
-        log_stripped_declarations = false;
-        generate_compile_time_struct_checks = false;
+        array_add(*opts.libnames,      "raylib");
+        array_add(*opts.include_paths, RAYLIB_PATH);
+        array_add(*opts.source_files,  tprint("%/src/raylib.h", RAYLIB_PATH));
+        array_add(*opts.source_files,  tprint("%/src/raymath.h", RAYLIB_PATH));
+        array_add(*opts.source_files,  tprint("%/src/rlgl.h", RAYLIB_PATH));
+        array_add(*opts.strip_prefixes, "rl");
+        opts.auto_detect_enum_prefixes = false;
+        opts.log_stripped_declarations = false;
+        opts.generate_compile_time_struct_checks = false;
 
-        visitor   = raylib_visitor;
+        opts.strip_flags = .SYMBOLS_WITH_UNKNOWN_FOREIGN_LIBS;
+
+        opts.visitor   = raylib_visitor;
     }
 
     return generate_bindings(opts, output_filename);

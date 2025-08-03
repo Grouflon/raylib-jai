@@ -39,6 +39,7 @@ IsKeyUp :: (key: KeyboardKey) -> bool { return IsKeyUp(cast(s32) key); }
 SetExitKey :: (key: KeyboardKey) -> void { return SetExitKey(cast(s32) key); }
 
 #scope_module
+va_list :: *void;
 
 #if OS == .WINDOWS {
     #load "windows.jai";
